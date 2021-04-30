@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: yfker-service
+  # 激活使用的配置文件
+  profiles:
+    active: @package.environment@
+  # #fileupload
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+# 网关过滤配置
+gateway:
+  shouldSkipButNeedLoginUrls:
+    - /user/currentUser
+  shouldSkipUrls:
+    - /login/**
+    - /swagger-ui.html
+    - /v2/api-docs/**
+    - /f/u1
+    - /f/dn1
+    - /f/getByIds
+    - /scan/uri
+    - /f/downloadFile

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yfker.server.dao.mapper.PaitentMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="baseColumnList">
+        t.f_id AS id,
+        t.f_username AS username,
+        t.f_gender AS gender,
+        t.f_id_card_no AS idCardNo,
+        t.f_phone_number AS phoneNumber,
+        t.f_birthday AS birthday,
+        t.f_isdeleted AS isdeleted,
+        t.f_update_time AS updateTime,
+        t.f_create_time AS createTime
+    </sql>
+
+    <!-- 使用对象类型传参 -->
+    <select id="listPageByDto" parameterType="com.yfker.server.pojo.dto.PaitentQueryDto" resultType="com.yfker.server.pojo.vo.PaitentListVo">
+        SELECT <include refid="baseColumnList" /> FROM t_paitent t where t.f_isdeleted=0
+        <if test="dto != null">
+            <!-- 这里写自己的条件拼装 -->
+
+        </if>
+        ORDER BY t.f_update_time DESC
+    </select>
+
+</mapper>
