@@ -1,0 +1,18 @@
+${ModelName}
+
+${tableName}
+
+${tableComment}
+
+
+${ModuleName}
+
+${author}
+
+${crateDate}
+
+
+${serialVersionUID}
+
+${mgnModule}  -- 管理员模块
+${pageModule}  -- 管理员模块
