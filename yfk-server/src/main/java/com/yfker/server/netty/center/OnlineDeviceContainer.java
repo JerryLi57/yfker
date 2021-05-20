@@ -48,11 +48,12 @@ public class OnlineDeviceContainer {
         // type 区分消息的来源
         if (device.getType() == MsgTypeEnum.WEB.getCode()) {
             webDevices.add(device);
+            log.info("设备 [ {}-{} ] 上线了", device.getType(), device.getChannelId());
         } else {
             AppDevices.put(device.getEsm(), device);
             AppChannelId.put(device.getChannelId(), device.getEsm());
+            log.info("设备 [ {}-{} ] 上线了", device.getType(), device.getEsm());
         }
-        log.info("设备 [ {}-{} ] 上线了", device.getType(), device.getChannelId());
     }
 
 
