@@ -1,4 +1,4 @@
-package com.yfker.server.netty;
+package com.yfker.server.netty.chat;
 
 import com.alibaba.fastjson.JSON;
 import io.netty.buffer.ByteBuf;

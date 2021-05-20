@@ -1,4 +1,4 @@
-package com.yfker.server.netty;
+package com.yfker.server.netty.chat;
 
 import com.yfker.common.constant.Constants;
 import io.netty.bootstrap.ServerBootstrap;

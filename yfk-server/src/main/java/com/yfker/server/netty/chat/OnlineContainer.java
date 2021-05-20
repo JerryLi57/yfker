@@ -1,16 +1,9 @@
-package com.yfker.server.netty;
+package com.yfker.server.netty.chat;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.lolaage.chat.dto.MsgBodyDto;
-import com.lolaage.chat.dto.request.MeetChatRecordedQueryDto;
-import com.lolaage.chat.dto.response.MeetChatRecordedListDto;
-import com.lolaage.chat.pool.ITask;
-import com.lolaage.chat.pool.TaskDispatchCenter;
-import com.lolaage.chat.service.IMeetChatRecordedService;
-import com.lolaage.chat.task.ChatMsgClearTask;
-import com.lolaage.chat.task.ChatMsgToDbTask;
+import com.yfker.server.pool.ITask;
+import com.yfker.server.pool.TaskDispatchCenter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +35,6 @@ public class OnlineContainer {
      */
     @Autowired
     MsgCache msgCache;
-    @Autowired
-    IMeetChatRecordedService meetChatRecordedService;
     @Autowired
     TaskDispatchCenter taskDispatchCenter;
 
@@ -82,7 +73,7 @@ public class OnlineContainer {
      */
     private void firstInitMeet(String meetNumber, List<OnlineUser> list) {
         meetsUsers.put(meetNumber, list);
-        // 注册聊天记录定时同步任务
+        /*// 注册聊天记录定时同步任务
         taskDispatchCenter.registerTask("autoPersistenceChat_" + meetNumber, 1, 11, (short) 5, new ChatMsgToDbTask(meetNumber, meetChatRecordedService));
         // 注册一个自动清理缓存的任务
         taskDispatchCenter.registerTask("autoClearChat_" + meetNumber, 1, 5 * 60L, (short) 5, new ChatMsgClearTask(meetNumber));
@@ -101,7 +92,7 @@ public class OnlineContainer {
                 obj.put("date", dto.getMsgTime());
                 msgCache.putMsgNotToCache(obj);
             }
-        }
+        }*/
     }
 
     /**
@@ -117,7 +108,7 @@ public class OnlineContainer {
      * 彻底清空所有的在线人员
      * @param meetNumber
      */
-    public void removeAllUserByMeetNumber(String meetNumber){
+    public void removeAllUserByMeetNumber(String meetNumber) {
         meetsUsers.remove(meetNumber);
     }
 
@@ -188,14 +179,14 @@ public class OnlineContainer {
         public void work() {
             try {
                 Thread.sleep(200);
-                List<MsgBodyDto> msgs = msgCache.getListByMeetNumber(meetNumber);
+                /*List<MsgBodyDto> msgs = msgCache.getListByMeetNumber(meetNumber);
                 if (msgs == null || msgs.isEmpty()) {
                     return;
                 }
                 for (MsgBodyDto msg : msgs) {
                     log.info("推送消息：{}", msg.getMsg());
                     ctx.channel().writeAndFlush(new TextWebSocketFrame(msg.getMsg()));
-                }
+                }*/
             } catch (Exception e) {
                 // 因为任务都是 schedule 的，所以不考虑异常情况下的重试机制，仅仅只做日志打印
                 log.error("PushMsg exception：" + e.getMessage(), e);

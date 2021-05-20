@@ -1,7 +1,7 @@
-package com.yfker.server.netty;
+package com.yfker.server.netty.chat;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lolaage.chat.dto.MsgBodyDto;
+import com.yfker.server.pojo.dto.MsgBodyDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

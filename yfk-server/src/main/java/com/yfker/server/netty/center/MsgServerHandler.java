@@ -1,7 +1,7 @@
-package com.yfker.server.netty;
+package com.yfker.server.netty.center;
 
-import com.lolaage.chat.constants.Constants;
-import com.lolaage.chat.utils.MyBeansUtils;
+import com.yfker.common.constant.Constants;
+import com.yfker.server.utils.MyBeansUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -13,16 +13,17 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 /**
- * @description: 聊天消息处理类
+ * @description: 消息处理类
  * @author: lijiayu
  * @date: 2020-09-27 16:25
  **/
 @Slf4j
-public class ChatServerHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
+public class MsgServerHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
-    static final String heartCheckStr = "6576498645_ALIVE";
+    static final String heartCheckStr = "yfk888_ALIVE";
 
     /**
      * GlobalEventExecutor.INSTANCE 是全局的事件执行器，是一个单例
@@ -32,10 +33,10 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<TextWebSocket
     /**
      * 在线用户的容器
      */
-    OnlineContainer onlineContainer;
+    OnlineDeviceContainer onlineContainer;
 
-    public ChatServerHandler() {
-        onlineContainer = MyBeansUtils.getBean(OnlineContainer.class);
+    public MsgServerHandler() {
+        onlineContainer = MyBeansUtils.getBean(OnlineDeviceContainer.class);
     }
 
     /**
@@ -102,19 +103,24 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<TextWebSocket
                 log.info("Origin 为空 ");
                 ctx.close();
             } else {
-                String userId = getParam(request.uri(), "userId");
-                String meetNumber = getParam(request.uri(), "meetNumber");
-                String userName = getParam(request.uri(), "userName");
-                if (null != userId) {
-                    OnlineUser onlineUser = new OnlineUser();
-                    onlineUser.setId(userId);
-                    onlineUser.setChannelId(ctx.channel().id().asLongText());
-                    onlineUser.setName(userName);
-                    onlineUser.setCtx(ctx);
-                    onlineContainer.put(meetNumber, onlineUser);
+                String esm = getParam(request.uri(), "esm");
+                String type = getParam(request.uri(), "type");
+                if (!StringUtils.isEmpty(type)) {
+                    try {
+                        int itype = Integer.parseInt(type);
+                        OnlineDevice device = new OnlineDevice();
+                        device.setEsm(esm);
+                        device.setType(itype);
+                        device.setChannelId(ctx.channel().id().asLongText());
+                        device.setCtx(ctx);
+                        onlineContainer.putDevice(device);
+                    } catch (NumberFormatException e) {
+                        log.info("不允许 [ {} ] 连接 强制断开, type:{}", Origin, type);
+                        ctx.close();
+                    }
                     request.setUri(Constants.DEFAULT_WEB_SOCKET_LINK);
                 } else {
-                    log.info("不允许 [ {} ] 连接 强制断开", Origin);
+                    log.info("不允许 [ {} ] 连接 强制断开, type isEmpty", Origin);
                     ctx.close();
                 }
             }

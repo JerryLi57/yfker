@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MyBeanUtils {
+public class SimpleBeanUtils {
 
 
     /**
@@ -156,10 +156,10 @@ public class MyBeanUtils {
                 return null;
             }
             if (obj instanceof Map) {
-                toObj = (V) MyBeanUtils.mapToBean(v, (Map<String, Object>) obj);
+                toObj = (V) SimpleBeanUtils.mapToBean(v, (Map<String, Object>) obj);
             } else {
                 toObj = v.newInstance();
-                MyBeanUtils.autoFillEqFields(obj, toObj);
+                SimpleBeanUtils.autoFillEqFields(obj, toObj);
             }
         } catch (InstantiationException e) {
             e.printStackTrace();

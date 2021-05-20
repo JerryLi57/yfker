@@ -1,4 +1,4 @@
-package com.yfker.server.netty;
+package com.yfker.server.netty.chat;
 
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
