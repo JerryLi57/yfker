@@ -96,20 +96,19 @@ public class OnlineDeviceContainer {
         if (null == type) {
             return;
         }
-        // 对来源web端的消息，根据esm 设备编号 发送给指定的app
-        if (type == MsgTypeEnum.WEB.getCode()) {
-            String esm = obj.getString("esm");
-            OnlineDevice device = AppDevices.get(esm);
-            if (null == device) {
-                return;
-            }
-            log.info("推送给设备的消息:{}", obj.toJSONString());
-            device.getCtx().channel().writeAndFlush(new TextWebSocketFrame(obj.toJSONString()));
-        }
         // 对来源app端的消息，推送给所有的在线web端
         for (OnlineDevice device : webDevices) {
             log.info("推送给Web端的消息:{}", obj.toJSONString());
             device.getCtx().channel().writeAndFlush(new TextWebSocketFrame(obj.toJSONString()));
+        }
+        // 对来源web端的消息，根据esm 设备编号 发送给指定的app
+        if (type == MsgTypeEnum.WEB.getCode()) {
+            String esm = obj.getString("esm");
+            OnlineDevice device = AppDevices.get(esm);
+            if (null != device && null != device.getCtx()) {
+                log.info("推送给设备的消息:{}", obj.toJSONString());
+                device.getCtx().channel().writeAndFlush(new TextWebSocketFrame(obj.toJSONString()));
+            }
         }
     }
 

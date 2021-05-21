@@ -20,6 +20,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.Charset;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @description:
@@ -68,7 +69,7 @@ public class MsgServer {
                                     .addLast(new StringDecoder(Charset.forName("UTF-8")))
                                     //对客户端，如果在60秒内没有向服务端发送心跳，就主动断开
                                     //三个参数分别为读/写/读写的空闲，我们只针对读空闲检测
-                                    .addLast(new IdleStateHandler(120, 0, 0))
+                                    .addLast(new IdleStateHandler(120, 0, 0, TimeUnit.SECONDS))
                                     // 自定义处理器 - 处理 web socket 文本消息
                                     .addLast(new MsgServerHandler())
                                     // 自定义处理器 - 处理 web socket 二进制消息
