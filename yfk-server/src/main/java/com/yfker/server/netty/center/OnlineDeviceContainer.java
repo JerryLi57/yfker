@@ -92,6 +92,7 @@ public class OnlineDeviceContainer {
 
     private void pushMsgToClient(JSONObject obj) {
         Integer type = obj.getInteger("type");
+        log.info("pushMsgToClient type:{}", type);
         if (null == type) {
             return;
         }
